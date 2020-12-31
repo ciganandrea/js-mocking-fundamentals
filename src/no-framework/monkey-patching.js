@@ -1,12 +1,14 @@
-const assert = require('assert')
-const thumbWar = require('../thumb-war')
-const utils = require('../utils')
+const assert = require('assert');
+const thumbWar = require('../thumb-war');
+const utils = require('../utils');
 
-const originalGetWinner = utils.getWinner
-utils.getWinner = (p1, p2) => p1
+const originalGetWinner = utils.getWinner;
 
-const winner = thumbWar('Kent C. Dodds', 'Ken Wheeler')
-assert.strictEqual(winner, 'Kent C. Dodds')
+// Monkey-patching
+utils.getWinner = (player1, player2) => player1;
 
-// cleanup
-utils.getWinner = originalGetWinner
+const winner = thumbWar('Super Mario', 'Superman');
+assert.strictEqual(winner, 'Super Mario');
+
+// Clean-up
+utils.getWinner = originalGetWinner;
