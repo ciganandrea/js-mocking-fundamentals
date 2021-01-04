@@ -1,26 +1,33 @@
-const assert = require('assert')
-const thumbWar = require('../thumb-war')
-const utils = require('../utils')
+const assert = require('assert');
 
-function fn(impl = () => {}) {
-  const mockFn = (...args) => {
-    mockFn.mock.calls.push(args)
-    return impl(...args)
-  }
-  mockFn.mock = {calls: []}
-  mockFn.mockImplementation = newImpl => (impl = newImpl)
-  return mockFn
+const utils = require('../utils');
+const thumbWar = require('../thumb-war');
+
+function fn(implementation) {
+	const mockFn = (...args) => {
+		mockFn.mock.calls.push(args);
+		return implementation(...args);
+	};
+
+	mockFn.mock = {
+		calls: [],
+	};
+
+	return mockFn;
 }
 
-const originalGetWinner = utils.getWinner
-utils.getWinner = fn((p1, p2) => p1)
+// Monkey-patch
+const originalGetWinner = utils.getWinner;
+utils.getWinner = fn((player1, player2) => player1);
 
-const winner = thumbWar('Kent C. Dodds', 'Ken Wheeler')
-assert.strictEqual(winner, 'Kent C. Dodds')
+const winner = thumbWar('Super Mario', 'Superman');
+
+assert.strictEqual(winner, 'Super Mario');
+
 assert.deepStrictEqual(utils.getWinner.mock.calls, [
-  ['Kent C. Dodds', 'Ken Wheeler'],
-  ['Kent C. Dodds', 'Ken Wheeler']
-])
+	['Super Mario', 'Superman'],
+	['Super Mario', 'Superman'],
+]);
 
-// cleanup
-utils.getWinner = originalGetWinner
+// Clean-up
+utils.getWinner = originalGetWinner;
