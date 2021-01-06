@@ -1,18 +1,19 @@
-require('../__no-framework-mocks__/utils') // prime the cache
-const utilsPath = require.resolve('../utils')
-const mockUtilsPath = require.resolve('../__no-framework-mocks__/utils')
-require.cache[utilsPath] = require.cache[mockUtilsPath]
+require('../__no-framework-mocks__/utils');
+const utilsPath = require.resolve('../utils');
+const mockUtilsPath = require.resolve('../__no-framework-mocks__/utils');
 
-const assert = require('assert')
-const thumbWar = require('../thumb-war')
-const utils = require('../utils')
+require.cache[utilsPath] = require.cache[mockUtilsPath];
 
-const winner = thumbWar('Kent C. Dodds', 'Ken Wheeler')
-assert.strictEqual(winner, 'Kent C. Dodds')
+const assert = require('assert');
+const utils = require('../utils');
+const thumbWar = require('../thumb-war');
+
+const winner = thumbWar('Super Mario', 'Superman');
+
+assert.strictEqual(winner, 'Super Mario');
 assert.deepStrictEqual(utils.getWinner.mock.calls, [
-  ['Kent C. Dodds', 'Ken Wheeler'],
-  ['Kent C. Dodds', 'Ken Wheeler']
-])
+	['Super Mario', 'Superman'],
+	['Super Mario', 'Superman'],
+]);
 
-// cleanup
-delete require.cache[utilsPath]
+delete require.cache[utilsPath];

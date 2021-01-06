@@ -1,12 +1,15 @@
-function fn(impl = () => {}) {
-  const mockFn = (...args) => {
-    mockFn.mock.calls.push(args)
-    return impl(...args)
-  }
-  mockFn.mock = {calls: []}
-  return mockFn
-}
+function fn(implementation = () => {}) {
+	const mockFn = (...args) => {
+		mockFn.mock.calls.push(args);
+		return implementation(...args);
+	};
 
-module.exports = {
-  getWinner: fn((p1, p2) => p1)
+	mockFn.mock = { calls: [] };
+	mockFn.mockImplementation = (newImplementation) =>
+		(implementation = newImplementation);
+
+	return mockFn;
 }
+module.exports = {
+	getWinner: fn((player1, player2) => player1),
+};

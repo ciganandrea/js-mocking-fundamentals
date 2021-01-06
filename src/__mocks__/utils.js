@@ -1,3 +1,3 @@
 module.exports = {
-  getWinner: jest.fn((p1, p2) => p1)
-}
+	getWinner: jest.fn((player1, player2) => player1),
+};
