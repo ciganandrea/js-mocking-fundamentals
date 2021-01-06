@@ -1,32 +1,38 @@
-function fn(impl = () => {}) {
-  const mockFn = (...args) => {
-    mockFn.mock.calls.push(args)
-    return impl(...args)
-  }
-  mockFn.mock = {calls: []}
-  return mockFn
+const assert = require('assert');
+const utilsPath = require.resolve('../utils');
+
+function fn(implementation = () => {}) {
+	const mockFn = (...args) => {
+		mockFn.mock.calls.push(args);
+		return implementation(...args);
+	};
+
+	mockFn.mock = { calls: [] };
+	mockFn.mockImplementation = (newImplementation) =>
+		(implementation = newImplementation);
+
+	return mockFn;
 }
 
-const utilsPath = require.resolve('../utils')
 require.cache[utilsPath] = {
-  id: utilsPath,
-  filename: utilsPath,
-  loaded: true,
-  exports: {
-    getWinner: fn((p1, p2) => p1)
-  }
-}
+	id: utilsPath,
+	filename: utilsPath,
+	loaded: true,
+	exports: {
+		getWinner: fn((player1, player2) => player1),
+	},
+};
 
-const assert = require('assert')
-const thumbWar = require('../thumb-war')
-const utils = require('../utils')
+const utils = require('../utils');
+const thumbWar = require('../thumb-war');
 
-const winner = thumbWar('Kent C. Dodds', 'Ken Wheeler')
-assert.strictEqual(winner, 'Kent C. Dodds')
+const winner = thumbWar('Super Mario', 'Superman');
+
+assert.strictEqual(winner, 'Super Mario');
 assert.deepStrictEqual(utils.getWinner.mock.calls, [
-  ['Kent C. Dodds', 'Ken Wheeler'],
-  ['Kent C. Dodds', 'Ken Wheeler']
-])
+	['Super Mario', 'Superman'],
+	['Super Mario', 'Superman'],
+]);
 
-// cleanup
-delete require.cache[utilsPath]
+// Clean-up
+delete require.cache[utilsPath];
